@@ -1,0 +1,72 @@
+﻿@model List<Produto>
+
+@{
+    ViewData["Title"] = "Modelos";
+}
+
+<div class='container text-center'>
+
+    <br>
+    <div class='row'>
+        @foreach (var item in Model)
+        {
+            <div class='col-4 mb-4'>
+
+                <div class='card' style='width: 18rem;'>
+
+                    <img src="./imagens/@(item.ImagemProduto).jpg" class='card-img-top' alt='...'>
+                    <div class='card-body'>
+
+                        <h5 class='card-title'>@item.DescricaoProduto</h5>
+                        <p class='card-text'>Valor R$ @item.ValorProduto,00</p>
+
+
+
+                        @* <form asp-action="AdicionarItemCarrinho" asp-controller="Carrinho" method="post"> *@
+
+                            @* <input type="hidden" name="produtoId" id="@item.ProdutoId" value="@item.ProdutoId"> *@
+                            @* <button type='submit' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modalCarrinho'> *@
+                            <button type='button' class='btn btn-primary' onclick="adicionarProdutoCarrinho(@item.ProdutoId)">
+                                Comprar
+                            </button>
+
+                        @* </form> *@
+
+
+
+                    </div>
+
+                </div>
+
+            </div>
+            <br>
+
+        }
+
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    function adicionarProdutoCarrinho(_produtoId) {
+        var dados = {
+            produtoId:_produtoId
+        }
+        $.ajax({
+            type:"POST",
+            dataType:"json",
+            data:dados,
+            url:'@Url.Action("AdicionarItemCarrinho", "Carrinho")',
+            success: function (resposta){
+                    Swal.fire({
+                    title: "Sucesso",
+                    text: "Produto Adicionado ao Carrinho",
+                    icon: "success"
+                  })
+            }
+        });
+    }
+
+
+</script>

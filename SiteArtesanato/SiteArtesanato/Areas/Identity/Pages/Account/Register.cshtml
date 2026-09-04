@@ -1,0 +1,159 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div class="col-md-6">
+            <h2>Create a new account.</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.NomeCliente" class="form-control" aria-required="true" placeholder="Nome" />
+                <label asp-for="Input.NomeCliente">Nome</label>
+                <span asp-validation-for="Input.NomeCliente" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.CpfCliente" class="form-control" aria-required="true" placeholder="CPF" />
+                <label asp-for="Input.CpfCliente">CPF</label>
+                <span asp-validation-for="Input.CpfCliente" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Nascimento" class="form-control" placeholder="Nascimento" type="date" />
+                <label asp-for="Input.Nascimento">Nascimento</label>
+                <span asp-validation-for="Input.Nascimento" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label asp-for="Input.Email">Email</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Telefone" class="form-control" placeholder="Telefone" />
+                <label asp-for="Input.Telefone">Telefone</label>
+                <span asp-validation-for="Input.Telefone" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.CEP" class="form-control" placeholder="CEP" id="cep" onblur="buscaCep()" onclick="limpaCampos()" />
+                <label asp-for="Input.CEP">CEP</label>
+                <span asp-validation-for="Input.CEP" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Logradouro" class="form-control" aria-required="true" placeholder="Rua" id="logradouroId" />
+                <label asp-for="Input.Logradouro">Rua</label>
+                <span asp-validation-for="Input.Logradouro" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Numero" class="form-control" aria-required="true" placeholder="Numero" />
+                <label asp-for="Input.Numero">Numero</label>
+                <span asp-validation-for="Input.Numero" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Complemento" class="form-control" placeholder="Complemento" />
+                <label asp-for="Input.Complemento">Complemento</label>
+                <span asp-validation-for="Input.Complemento" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Bairro" class="form-control" placeholder="Bairro" id="bairroId"/>
+                <label asp-for="Input.Bairro">Bairro</label>
+                <span asp-validation-for="Input.Bairro" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Cidade" class="form-control" aria-required="true" placeholder="Cidade" id="cidadeId"/>
+                <label asp-for="Input.Cidade">Cidade</label>
+                <span asp-validation-for="Input.Cidade" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Estado" class="form-control" aria-required="true" placeholder="Estado" id="estadoId" />
+                <label asp-for="Input.Estado">Estado</label>
+                <span asp-validation-for="Input.Estado" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.Password">Password</label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <input asp-for="Input.EmailCliente" type="hidden" value="Email"/>
+            <input asp-for="Input.UserId" type="hidden" value="UserId"/>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+
+        </div>
+
+    </form>
+    @* 
+    <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h3>Use another service to register.</h3>
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                            about setting up this ASP.NET application to support logging in via external services</a>.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins!)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div> *@
+</div>
+
+<script>
+    function buscaCep(){
+        var _cep = $("#cep").val();
+        console.log(cep);
+        var dados = {cep:_cep};
+        $.ajax({
+            type:"POST",
+            dataType:"json",
+            data:dados,
+            url:'@Url.Action("PreencheEndereco", "Clientes")',
+            success: function (resposta){
+                document.getElementById("logradouroId").value = resposta.logradouro;
+                document.getElementById("bairroId").value = resposta.bairro;
+                document.getElementById("cidadeId").value = resposta.cidade;
+                document.getElementById("estadoId").value = resposta.estado;
+
+            }
+        });
+    }
+    function limpaCampos(){
+                document.getElementById("logradouroId").value = "";
+                document.getElementById("bairroId").value = "";
+                document.getElementById("cidadeId").value = "";
+                document.getElementById("estadoId").value = "";
+    }
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

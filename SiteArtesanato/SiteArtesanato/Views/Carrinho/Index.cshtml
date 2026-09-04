@@ -1,0 +1,95 @@
+﻿@using SiteArtesanato.DTO
+@model Dictionary<int, ItemCarrinhoDTO>
+
+@{
+    ViewData["Title"] = "Carrinho";
+}
+
+<h1>
+    CARRINHO
+</h1>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Produto</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Qtde</th>
+                <th scope="col">Valor</th>
+                <th scope="col"></th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Values)
+            {
+                <tr>
+                    <td><img style="width:100px" src="./imagens/@(item.Produto.ImagemProduto).jpg" /></td>
+                    <td>@item.Produto.DescricaoProduto</td>
+                    <td><a class="me-2" href="#" onclick="alterarQuantidade(@(item.Produto.ProdutoId),'@(item.CarrinhoId)',false)"><i class="bi bi-bag-dash"></i></a> @item.Quantidade <a class="ms-2" href="#" onclick="alterarQuantidade(@(item.Produto.ProdutoId),'@(item.CarrinhoId)',true)"><i class="bi bi-bag-plus"></i></a></td>
+                    <td>@(item.Produto.ValorProduto* item.Quantidade),00</td>
+                    <td><a href="#" onclick="removerItemCarrinho(@(item.Produto.ProdutoId),'@(item.CarrinhoId)')"><i class="bi bi-trash3"></i></a> </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h1> CARRINHO VAZIO </h1>
+}
+
+<script type="text/javascript">
+    function removerItemCarrinho(_produtoId,_carrinhoId){
+        var dados = {
+            produtoId:_produtoId,
+            carrinhoId:_carrinhoId
+        }
+        $.ajax({
+            type:"POST",
+            dataType:"json",
+            data:dados,
+            url:'@Url.Action("RemoverItemCarrinho", "Carrinho")',
+            success: function (resposta){
+                    Swal.fire({
+                    title: "Sucesso",
+                    text: "Produto Excluído do Carrinho",
+                    icon: "success"
+                  }).then((result)=>{
+                    window.location.reload();
+                  })
+
+            }
+        });
+
+    }
+
+     function alterarQuantidade(_produtoId,_carrinhoId, _aumentar){
+        var dados = {
+            produtoId:_produtoId,
+            carrinhoId:_carrinhoId,
+            aumentarQuantidade:_aumentar
+        }
+        $.ajax({
+            type:"POST",
+            dataType:"json",
+            data:dados,
+            url:'@Url.Action("AlterarQuantidadeItem", "Carrinho")',
+            success: function (resposta){
+                    Swal.fire({
+                    title: "Sucesso",
+                    text: "Quantidade Alterada",
+                    icon: "success"
+                  }).then((result)=>{
+                    window.location.reload();
+                  })
+
+            }
+        });
+
+    }
+
+</script>
